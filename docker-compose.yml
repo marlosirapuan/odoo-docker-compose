@@ -1,0 +1,26 @@
+version: '2'
+services:
+  web:
+    image: odoo:13
+    tty: true
+    command: -- --dev=reload
+    depends_on:
+      - db
+    ports:
+      - '80:8069'
+      - '443:8071'
+    volumes:
+      - ./addons:/mnt/extra-addons
+      - ./etc/odoo:/etc/odoo
+  db:
+    image: postgres:11
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data/pgdata
+
+volumes:
+  odoo-db-data:
